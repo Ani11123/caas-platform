@@ -13,6 +13,7 @@
     "@azure/identity": "^4.4.1",
     "@google-cloud/security-center": "^8.12.0",
     "aws-sdk": "^2.1691.0",
+    "dotenv": "^16.4.5",
     "express": "^4.21.0"
   }
 }
