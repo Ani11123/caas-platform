@@ -13,7 +13,7 @@ const port = process.env.PORT || 3000;
 AWS.config.update({
   accessKeyId: process.env.AWS_ACCESS_KEY,
   secretAccessKey: process.env.AWS_SECRET_KEY,
-  region: 'us-east-1'  // Use your desired AWS region
+  region: process.env.AWS_REGION
 });
 
 // Set up AWS Config service
@@ -26,19 +26,18 @@ app.get('/', (req, res) => {
 
 // Route to fetch compliance status
 app.get('/compliance-status', (req, res) => {
-  // Define the parameters to get compliance details
   const params = {
-    ComplianceType: 'COMPLIANT', // You can change this to NON_COMPLIANT if needed
-    Limit: 10 // Return the first 10 compliance results
+    ComplianceType: 'NON_COMPLIANT', // Change to COMPLIANT if needed
+    Limit: 10
   };
 
   // Call AWS Config to get compliance details
   configService.describeComplianceByConfigRule(params, (err, data) => {
     if (err) {
-      console.error('Error fetching compliance data:', err);
-      return res.status(500).json({ error: 'Failed to fetch compliance data' });
+      console.error('AWS Config Error:', err); // Log error for debugging
+      return res.status(500).json({ error: 'Failed to fetch compliance data', details: err.message });
     }
-    // Send the compliance data as a response
+    // Send compliance data as a response
     res.json(data);
   });
 });
